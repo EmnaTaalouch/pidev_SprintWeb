@@ -1,0 +1,9 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}New EventType{% endblock %}
+
+{% block body %}
+    {{ include('event_type/_form.html.twig') }}
+
+    <a href="{{ path('app_event_type_index') }}">back to list</a>
+{% endblock %}

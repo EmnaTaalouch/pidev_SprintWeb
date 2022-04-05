@@ -1,0 +1,23 @@
+
+<!-- Default Basic Forms Start -->
+<div class="pd-20 card-box mb-30">
+    <div class="clearfix">
+        <div class="pull-left">
+            <h4 class="text-blue h4">Event Type Form</h4>
+            <p class="mb-30">{{ label|default('Ajouter') }} un event type</p>
+        </div>
+    </div>
+    {{ form_start(form) }}
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-2 col-form-label">Libelle</label>
+            <div class="col-sm-12 col-md-10">
+                {{ form_widget(form.libelle,{'attr': {'placeholder':'Libelle','class':'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group row col-sm-12">
+        <button class="btn btn-success">{{ button_label|default('Ajouter') }}</button>
+        </div>
+    {{ form_end(form) }}
+
+<!-- Default Basic Forms End -->
