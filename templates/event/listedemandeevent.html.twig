@@ -1,0 +1,68 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+
+    <!-- Simple Datatable start -->
+    <div class="card-box mb-30">
+        <div class="pd-20">
+            <h4 class="text-blue h4">Liste Demande Event </h4>
+            <p class="mb-0"></p>
+        </div>
+        <div class="pb-20">
+            <table class="table">
+                <thead>
+                <tr>
+                <th>Id</th>
+                <th>Nom_event</th>
+                <th>Event_description</th>
+                <th>Event_theme</th>
+                <th>Date_debut</th>
+                <th>Date_fin</th>
+                <th>Event_status</th>
+                <th>Nbr_participants</th>
+                <th>Lieu</th>
+                <th>Image_event</th>
+                <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in events %}
+            <tr>
+                    <td>{{ event.id }}</td>
+                    <td>{{ event.nomEvent }}</td>
+                    <td>{{ event.eventDescription }}</td>
+                    <td>{{ event.eventTheme }}</td>
+                    <td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d') : '' }}</td>
+                    <td>{{ event.dateFin ? event.dateFin|date('Y-m-d') : '' }}</td>
+                    <td>{{ event.eventStatus }}</td>
+                    <td>{{ event.nbrParticipants }}</td>
+                    <td>{{ event.lieu }}</td>
+                    <td><img src="{{ asset('uploads/events/'~ event.imageEvent) }}" style="height: 100px;width: 100px"></td>
+                <td>
+                    <div class="dropdown">
+                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                            <i class="dw dw-more"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                            <a class="dropdown-item" href="{{ path('app_event_acceptrefuser', {'id': event.id, 'action': 'accept'}) }}"><i class="icon-copy fa fa-check" style="color: green" aria-hidden="true"></i> Accepter</a>
+                            <a class="dropdown-item" href="{{ path('app_event_acceptrefuser', {'id': event.id, 'action': 'refuse'}) }}"><i class="icon-copy fa fa-close" style="color: red" aria-hidden="true"></i> Refuser</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11" style="text-align: center;vertical-align: middle;" >no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

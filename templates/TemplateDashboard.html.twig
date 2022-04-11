@@ -26,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/src/plugins/datatables/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/src/plugins/datatables/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/vendors/styles/style.css') }}">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/src/plugins/dropzone/src/dropzone.css') }}">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
         <script>
@@ -40,6 +40,7 @@
 
 </head>
 <body>
+<!--
 <div class="pre-loader">
     <div class="pre-loader-box">
         <div class="loader-logo"><img src="{{ asset('dashboard/vendors/images/deskapp-logo.svg') }}" alt=""></div>
@@ -52,7 +53,7 @@
         </div>
     </div>
 </div>
-
+-->
 <div class="header">
     <div class="header-left">
         <div class="menu-icon dw dw-menu"></div>
@@ -313,6 +314,18 @@
 <script src="{{ asset('dashboard/src/plugins/datatables/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('dashboard/src/plugins/datatables/js/responsive.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/scripts/dashboard.js') }}"></script>
+    <script src="{{ asset('dashboard/src/plugins/dropzone/src/dropzone.js') }}"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+        $(".dropzone").dropzone({
+            addRemoveLinks: true,
+            removedfile: function(file) {
+                var name = file.name;
+                var _ref;
+                return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+            }
+        });
+    </script>
 {% endblock %}
 </body>
 </html>

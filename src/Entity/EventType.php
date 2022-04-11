@@ -23,7 +23,9 @@ class EventType
      * @ORM\Column(type="string", length=255)
      */
     private $libelle;
-
+    public function __toString() :string {
+        return $this->libelle;
+    }
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="id_type")
      */
