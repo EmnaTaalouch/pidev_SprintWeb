@@ -8,14 +8,19 @@
     <div class="card-box mb-30">
         <div class="pd-20">
             <h4 class="text-blue h4">Liste des evenements</h4>
-            <p class="mb-0"></p>
+            <p class="mb-0">
+            <div class="form-group row">
+                <div class="col-sm-12 col-md-10">
+                    <input class="form-control" id="nomevent" placeholder="search par nom event..." onkeyup="actionnom()">
+                </div>
+            </div>
+            </p>
         </div>
         <div class="pb-20">
-            <table class="table">
+            <table class="table" id="show">
                 <thead>
                 <tr>
                 <th>Nom evenement</th>
-
                 <th>theme</th>
                 <th>Date debut</th>
                 <th>Date fin</th>
@@ -53,7 +58,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3" style="text-align: center;vertical-align: middle;" >no records found</td>
+                <td colspan="9" style="text-align: center;vertical-align: middle;" >no records found</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -64,6 +69,19 @@
         </div>
     </div>
 
+    <script>
 
+        function actionnom(){
+            var sch=$("#nomevent").val();
+            $.ajax({
+                url: "{{ path('searcheventresponsable') }}",
+                data:{nom: sch},
+                type: "POST",
+                success: function(data){
+                    $('#show').html(data).show();
+                }
+            });
+        }
+    </script>
 
 {% endblock %}

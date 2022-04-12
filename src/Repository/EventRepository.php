@@ -21,6 +21,22 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function findEventByNameDQL($nom)
+    {
+        $Query=$this->getEntityManager()
+            ->createQuery("select a from App\Entity\Event a where a.nom_event LIKE :nom  ")
+            ->setParameter('nom','%'.$nom.'%');
+        return $Query->getResult();
+    }
+
+    public function findEventByNameAcceptedDQL($nom)
+    {
+        $Query=$this->getEntityManager()
+            ->createQuery("select a from App\Entity\Event a where a.nom_event LIKE :nom and a.demande_status = 'DemandeAccepted'  ")
+            ->setParameter('nom','%'.$nom.'%');
+        return $Query->getResult();
+    }
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException

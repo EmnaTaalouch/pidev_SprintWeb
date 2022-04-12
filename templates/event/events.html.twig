@@ -1,0 +1,37 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}Participer Event{% endblock %}
+
+{% block body %}
+
+    <section class="courses_area p_120">
+        <div class="container">
+            <div class="main_title">
+                <h2>Evenement Puplique</h2>
+                <p>There is a moment in the life of any aspiring astronomer that it is time to buy that first telescope. It’s exciting to think about setting up your own viewing station.</p>
+            </div>
+            <div class="row courses_inner">
+                <div class="col-lg-12">
+                    <div class="grid_inner">
+                        {% for event in events %}
+                        <div class="grid_item wd44">
+                            <div class="courses_item">
+                                <img src="{{ asset('uploads/events/' ~ event.imageEvent) }}" style="width: 360px;height: 220px;" alt="">
+                                <div class="hover_text">
+                                    <a class="cat" href="{{ path('event_participate', {'id': event.id }) }}">Participer</a>
+                                    <a href="#"><h4>{{ event.nomEvent }}</h4></a>
+                                    <ul class="list">
+                                        <li><a href="#"><i class="lnr lnr-users"></i> {{ event.users|length }} &nbsp; / &nbsp; {{ event.nbrParticipants }}</a></li>
+
+                                        <li><a href="#"><i class="lnr lnr-user"></i> {{ event.idClient.nom ~ ' ' ~ event.idClient.prenom }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

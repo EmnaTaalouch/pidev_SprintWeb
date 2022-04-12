@@ -1,0 +1,46 @@
+<table class="table" id="show">
+    <thead>
+    <tr>
+        <th>Nom evenement</th>
+        <th>theme</th>
+        <th>Date debut</th>
+        <th>Date fin</th>
+        <th>status</th>
+        <th>Nombre de participants</th>
+        <th>Lieu</th>
+        <th>Image</th>
+        <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+        <tr>
+
+            <td>{{ event.nomEvent }}</td>
+
+            <td>{{ event.eventTheme }}</td>
+            <td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d') : '' }}</td>
+            <td>{{ event.dateFin ? event.dateFin|date('Y-m-d') : '' }}</td>
+            <td>{{ event.eventStatus }}</td>
+            <td>{{ event.nbrParticipants }}</td>
+            <td>{{ event.lieu }}</td>
+            <td><img src="{{ asset('uploads/events/'~ event.imageEvent) }}" style="height: 100px;width: 100px"></td>
+            <td>
+                <div class="dropdown">
+                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <i class="dw dw-more"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{{ path('app_event_edit', {'id': event.id}) }}"><i class="dw dw-edit2"></i> Edit</a>
+                        <a class="dropdown-item" href="{{ path('app_event_delete', {'id': event.id}) }}"><i class="dw dw-delete-3"></i> Delete</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="9" style="text-align: center;vertical-align: middle;" >no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

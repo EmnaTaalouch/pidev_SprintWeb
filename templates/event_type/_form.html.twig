@@ -7,11 +7,12 @@
             <p class="mb-30">{{ label|default('Ajouter') }} un event type</p>
         </div>
     </div>
-    {{ form_start(form) }}
+    {{ form_start(form,{attr:{novalidate:'novalidate'}})  }}
         <div class="form-group row">
             <label class="col-sm-12 col-md-2 col-form-label">Libelle</label>
             <div class="col-sm-12 col-md-10">
                 {{ form_widget(form.libelle,{'attr': {'placeholder':'Libelle','class':'form-control'}}) }}
+                {{ form_errors(form.libelle,{'attr': {'class':'text-danger'}}) }}
             </div>
         </div>
 

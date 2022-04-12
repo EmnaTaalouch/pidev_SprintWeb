@@ -1,0 +1,31 @@
+<div class="progress-table" id="show">
+    <div class="table-head ">
+        <div class="country">Nom Evenement</div>
+        <div class="visit">Type Event</div>
+        <div class="visit">Date</div>
+        <div class="country">Status Evenement</div>
+        <div class="visit">Lieu</div>
+        <div class="visit">Participants</div>
+        <div class="visit">Demande Status</div>
+        <div class="visit"></div>
+    </div>
+    {% for event in events %}
+        <div class="table-row">
+            <div class="country">{{ event.nomEvent }}</div>
+            <div class="visit">{{ event.idType.libelle }}</div>
+            <div class="visit">{{ event.dateDebut|date('Y-m-d') }} <br> {{ event.dateFin|date('Y-m-d') }}</div>
+            <div class="country">{{ event.eventStatus }}</div>
+            <div class="visit">{{ event.lieu }}</div>
+            <div class="visit">{{ event.nbrParticipants }}</div>
+            <div class="visit">{{ event.demandeStatus }}</div>
+            <div class="visit">
+                {% if event.demandeStatus == 'DemandePending' %}
+                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                <a href="{{ path('app_event_editreserver', {'id': event.id}) }}"><span style="color: orange;" class="lnr lnr-undo"></span></a> &nbsp; &nbsp; &nbsp; &nbsp;
+                <a href="{{ path('app_event_deletereser', {'id': event.id}) }}"><span style="color: red" class="lnr lnr-exit-up"></span></a>
+                {% endif %}
+            </div>
+
+        </div>
+    {% endfor %}
+</div>
