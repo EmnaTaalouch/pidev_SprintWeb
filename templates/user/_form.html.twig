@@ -1,0 +1,52 @@
+<!-- Default Basic Forms Start -->
+<div class="pd-20 card-box mb-30">
+    <div class="clearfix">
+        <div class="pull-left">
+            <h4 class="text-blue h4">Formulaire </h4>
+            <p class="mb-30">{{ label|default('Entrer') }} les donnees de l'utilisateur </p>
+        </div>
+    </div>
+    {{ form_start(f,{attr:{novalidate:'novalidate'}}) }}
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-2 col-form-label">Nom</label>
+            <div class="col-sm-12 col-md-10">
+                {{ form_widget(f.nom,{'attr': {'placeholder':'Nom','class':'form-control'}}) }}
+                {{ form_errors(f.nom,{'attr': {'placeholder':'Nom','class':'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-2 col-form-label">Prenom</label>
+            <div class="col-sm-12 col-md-10">
+                {{ form_widget(f.prenom,{'attr': {'placeholder':'Prenom','class':'form-control'}}) }}
+                {{ form_errors(f.prenom,{'attr': {'placeholder':'Prenom','class':'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-2 col-form-label">Login</label>
+            <div class="col-sm-12 col-md-10">
+                {{ form_widget(f.login,{'attr': {'placeholder':'Login','class':'form-control'}}) }}
+                {{ form_errors(f.login,{'attr': {'placeholder':'Login','class':'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-2 col-form-label">Password</label>
+            <div class="col-sm-12 col-md-10">
+                {{ form_widget(f.password,{'attr': {'placeholder':'Password','class':'form-control'}}) }}
+                {{ form_errors(f.password,{'attr': {'placeholder':'Password','class':'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-2 col-form-label">Role</label>
+            <div class="col-sm-12 col-md-10">
+                {{ form_widget(f.role,{'attr': {'placeholder':'Role','class':'form-control'}}) }}
+                {{ form_errors(f.role,{'attr': {'placeholder':'Role','class':'text-danger'}}) }}
+            </div>
+        </div>
+        
+
+        <div class="form-group row col-sm-12">
+        <button class="btn btn-success">{{ button_label|default('Ajouter') }}</button>
+        </div>
+    {{ form_end(f) }}
+
+<!-- Default Basic Forms End -->

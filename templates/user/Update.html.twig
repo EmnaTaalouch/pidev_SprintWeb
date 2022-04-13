@@ -1,0 +1,10 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}Modifier{% endblock %}
+
+{% block body %}
+    {{ include('user/_form.html.twig', {'button_label': 'Modifier','label':'Modifier'}) }}
+
+    <a href="{{ path('affiche') }}">Retourner</a>
+
+{% endblock %}

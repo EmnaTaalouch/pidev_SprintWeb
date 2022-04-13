@@ -6,12 +6,16 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity("login")
  */
-class User
-{
+class User implements UserInterface
+{   
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -20,27 +24,60 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le nom doit etre non vide")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 20,
+     *      minMessage = "Entrer au minimum 4 caracteres ",
+     *      maxMessage = "Entrer au maximum 20 caracteres" )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="le nom ne doit pas contenir un entier"
+     * )
+     * @ORM\Column(type="string", length=100)
      */
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le prenom doit etre non vide")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 20,
+     *      minMessage = "Entrer au minimum 4 caracteres ",
+     *      maxMessage = "Entrer au maximum 20 caracteres" )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="le prenom ne doit pas contenir un entier"
+     * )
+     * @ORM\Column(type="string", length=20)
      */
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le login doit etre non vide")
+     * @Assert\Email(
+     *     message = "cet email '{{ value }}' est invalide."
+     * )
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $login;
 
     /**
+     * @Assert\NotBlank(message="le mot de passe doit etre non vide")
+     * @Assert\Regex(
+     *    pattern = "/^(?=.*\d)(?=.*[A-Z])(?=.*[@#$%])(?!.*(.)\1{2}).*[a-z]/m",
+     *    match=true,
+     *    message="Votre mot de passe doit comporter au moins huit caractères, dont des lettres 
+     *          majuscules et minuscules, un chiffre et un symbole.")
      * @ORM\Column(type="string", length=255)
      */
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Choice({"admin", "client"})
+     * @ORM\Column(type="string", length=20)
      */
     private $role;
 
@@ -48,6 +85,11 @@ class User
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="users")
      */
     private $events;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
 
     public function __construct()
     {
@@ -139,6 +181,39 @@ class User
     public function removeEvent(Event $event): self
     {
         $this->events->removeElement($event);
+        return $this;
+    }
+    public function getUsername()
+    {
+        return $this->nom;
+    }
+
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
         return $this;
     }
 }
