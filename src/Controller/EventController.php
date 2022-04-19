@@ -75,6 +75,20 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/tridatedebut", name="tridatedebut", methods={"POST"})
+     */
+    public function tridatedebut(Request $request)
+    {
+        if($request->get('date')=='ASC')
+            $events = $this->getDoctrine()->getManager()->getRepository(Event::class)->sortEventbyDateASCDQL();
+        else
+            $events = $this->getDoctrine()->getManager()->getRepository(Event::class)->sortEventbyDateDESCDQL();
+        return $this->render('event/trie_reserver.html.twig', array(
+            'events' => $events,
+        ));
+    }
+
+    /**
      * @Route("/searchevent", name="searchevent", methods={"POST"})
      */
     public function searchevent(Request $request)

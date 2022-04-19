@@ -7,12 +7,17 @@
             <p class="mb-30">{{ label|default('Ajouter') }} un event type</p>
         </div>
     </div>
-    {{ form_start(form,{attr:{novalidate:'novalidate'}})  }}
+    {{ form_start(form,{attr:{novalidate:'novalidate', 'onsubmit':'return validateForm();'}})  }}
         <div class="form-group row">
             <label class="col-sm-12 col-md-2 col-form-label">Libelle</label>
             <div class="col-sm-12 col-md-10">
-                {{ form_widget(form.libelle,{'attr': {'placeholder':'Libelle','class':'form-control'}}) }}
-                {{ form_errors(form.libelle,{'attr': {'class':'text-danger'}}) }}
+                {{ form_widget(form.libelle,{'attr': {'placeholder':'Libelle','id':'libelle','class':'form-control'}}) }}
+                <span class="" id="spanerror" >
+                    <span class="d-block">
+                        <span class="form-error-icon badge badge-danger text-uppercase">Error</span>
+                        <span class="form-error-message">Le Champ libelle est obligatoire !</span>
+                </span>
+                </span>
             </div>
         </div>
 

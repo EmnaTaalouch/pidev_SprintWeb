@@ -24,7 +24,7 @@ class EventRepository extends ServiceEntityRepository
     public function findEventByNameDQL($nom)
     {
         $Query=$this->getEntityManager()
-            ->createQuery("select a from App\Entity\Event a where a.nom_event LIKE :nom  ")
+            ->createQuery("select a from App\Entity\Event a where a.nom_event LIKE :nom or a.event_theme LIKE :nom or a.event_status LIKE :nom  ")
             ->setParameter('nom','%'.$nom.'%');
         return $Query->getResult();
     }
@@ -32,10 +32,24 @@ class EventRepository extends ServiceEntityRepository
     public function findEventByNameAcceptedDQL($nom)
     {
         $Query=$this->getEntityManager()
-            ->createQuery("select a from App\Entity\Event a where a.nom_event LIKE :nom and a.demande_status = 'DemandeAccepted'  ")
+            ->createQuery("select a from App\Entity\Event a where ( a.nom_event LIKE :nom or a.event_theme LIKE :nom or a.event_status LIKE :nom ) and a.demande_status = 'DemandeAccepted'  ")
             ->setParameter('nom','%'.$nom.'%');
         return $Query->getResult();
     }
+
+    public function sortEventbyDateASCDQL()
+    {
+        $Query=$this->getEntityManager()
+            ->createQuery("select a from App\Entity\Event a where a.demande_status = 'DemandeAccepted'  and a.event_status = 'publique' order by a.date_debut ASC ");
+        return $Query->getResult();
+    }
+    public function sortEventbyDateDESCDQL()
+    {
+        $Query=$this->getEntityManager()
+            ->createQuery("select a from App\Entity\Event a where a.demande_status = 'DemandeAccepted'  and a.event_status = 'publique' order by a.date_debut DESC ");
+        return $Query->getResult();
+    }
+    
 
     /**
      * @throws ORMException

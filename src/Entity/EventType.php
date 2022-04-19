@@ -21,8 +21,7 @@ class EventType
     private $id;
 
     /**
-     * @Assert\NotBlank(message="Le Champ libelle est obligatoire !")
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string",nullable=true, length=255)
      */
     private $libelle;
     public function __toString() :string {
