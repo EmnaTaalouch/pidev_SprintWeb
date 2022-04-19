@@ -1,0 +1,37 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Comptabilite{% endblock %}
+
+{% block body %}
+
+    <a href="{{ path('app_comptabilite_new') }}" class="btn btn-green">Creer Comptabilite</a>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Libelle</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date</th>
+            <th scope="col">Type</th>
+
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comptabiliter in comptabiliters %}
+            <tr>
+                <td>{{ comptabiliter.id }}</td>
+                <td>{{ comptabiliter.libelle }}</td>
+                <td>{{ comptabiliter.description }}</td>
+                <td>{{ comptabiliter.date | date('d/m/Y')}}</td>
+                <td>{{ comptabiliter.idtype.type }}</td>
+                <td>
+                    <a href="/comptabilite/edit/{{ comptabiliter.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/comptabilite/delete/{{ comptabiliter.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer ?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

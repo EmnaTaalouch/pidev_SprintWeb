@@ -1,0 +1,31 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Type{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_type_comptabilite_new') }}" class="btn btn-light">Creer Type Comptabilite</a>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Type</th>
+            <th scope="col">Montant</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for typecompt in typecompts %}
+            <tr>
+                <td>{{ typecompt.id }}</td>
+                <td>{{ typecompt.type }}</td>
+                <td>{{ typecompt.montant }}</td>
+                <td>
+                    <a href="/typecomptabilite/edit/{{ typecompt.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/typecomptabilite/delete/{{ typecompt.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer ?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
