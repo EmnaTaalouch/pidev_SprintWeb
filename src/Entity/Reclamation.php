@@ -6,6 +6,7 @@ use App\Repository\ReclamationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ReclamationRepository::class)
@@ -21,6 +22,13 @@ class Reclamation
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     * minMessage = "La description doit composer au mois {{ limit }} caractères",
+     * maxMessage = "La description doit composer au plus {{ limit }} caractères"
+     * )
      */
     private $description;
 
@@ -36,7 +44,9 @@ class Reclamation
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_client", referencedColumnName="id")
+     * })
      */
     private $user;
 
@@ -79,7 +89,7 @@ class Reclamation
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -91,7 +101,7 @@ class Reclamation
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage(?string $image): self
     {
         $this->image = $image;
 

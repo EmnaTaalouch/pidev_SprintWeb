@@ -1,0 +1,43 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}All Reponse{% endblock %}
+
+{% block body %}
+
+    <div>
+        <br>
+    </div>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Description</th>
+            <th scope="col">image</th>
+            <th scope="col">Date Creation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ reclamations.description }}</td>
+            <td>
+                <img width="100" height="100" src="{{ asset('uploads/images/') }}{{ reclamations.image }}" >
+            </td>
+            <td>{{ reclamations.DateReclamation|date('d-m-Y')}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Reponse</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.text }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

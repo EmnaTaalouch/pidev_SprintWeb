@@ -6,6 +6,7 @@ use App\Repository\ReponseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ReponseRepository::class)
@@ -21,11 +22,16 @@ class Reponse
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
      */
     private $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Reclamation::class, inversedBy="reponses")
+     *
+     * @ORM\ManyToOne(targetEntity=Reclamation::class)
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_reclamation", referencedColumnName="id")
+     * })
      */
     private $reclamations;
 
