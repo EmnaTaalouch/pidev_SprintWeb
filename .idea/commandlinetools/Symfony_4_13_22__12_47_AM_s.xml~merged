@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream:.idea/commandlinetools/Symfony_4_20_22__12_37_AM_s.xml
-<framework xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schemas/frameworkDescriptionVersion1.1.4.xsd" frameworkId="com.symfony" name="Symfony_4/20/22, 12:37 AM_s" invoke="c6cb673c-f45c-4553-bdf0-225dda0a12b3 C:\Users\Emna\Documents\GitHub\pidev_SprintWeb\bin\console" alias="s" enabled="true" version="2">
+<<<<<<< Updated upstream:.idea/commandlinetools/Symfony_4_13_22__12_47_AM_s.xml
+<framework xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schemas/frameworkDescriptionVersion1.1.4.xsd" frameworkId="com.symfony" name="Symfony_4/13/22, 12:47 AM_s" invoke="c6cb673c-f45c-4553-bdf0-225dda0a12b3 C:\Users\Emna\Documents\GitHub\pidev_SprintWeb\bin\console" alias="s" enabled="false" version="2">
+=======
+<framework xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schemas/frameworkDescriptionVersion1.1.4.xsd" frameworkId="com.symfony" name="Symfony_4/26/22, 9:55 AM_s" invoke="d15be420-53f8-43f7-a75c-adf2d49e0553 C:\Users\hazem\Documents\GitHub\pidev_SprintWeb\bin\console" alias="s" enabled="true" version="2">
   <extraData><![CDATA[version:3]]></extraData>
+>>>>>>> Stashed changes:.idea/commandlinetools/Symfony_4_26_22__9_55_AM_s.xml
 =======
 <framework xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schemas/frameworkDescriptionVersion1.1.4.xsd" frameworkId="com.symfony" name="Symfony_4/13/22, 12:47 AM_s" invoke="c6cb673c-f45c-4553-bdf0-225dda0a12b3 C:\Users\Emna\Documents\GitHub\pidev_SprintWeb\bin\console" alias="s" enabled="false" version="2">
->>>>>>> Stashed changes:.idea/commandlinetools/Symfony_4_13_22__12_47_AM_s.xml
-=======
-<framework xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schemas/frameworkDescriptionVersion1.1.4.xsd" frameworkId="com.symfony" name="Symfony_4/20/22, 12:37 AM_s" invoke="c6cb673c-f45c-4553-bdf0-225dda0a12b3 C:\Users\Emna\Documents\GitHub\pidev_SprintWeb\bin\console" alias="s" enabled="true" version="2">
-  <extraData><![CDATA[version:3]]></extraData>
->>>>>>> e3a7653b48c22f0487f89d8835ec6233f5cd5508:.idea/commandlinetools/Symfony_4_20_22__12_37_AM_s.xml
 >>>>>>> Stashed changes
   <command>
     <name>about</name>

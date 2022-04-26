@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\User;
-use App\Form\EventType;
+use App\Entity\EventType;
 use App\Repository\EventRepository;
 use App\Repository\EventTypeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,12 +19,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
+use Twilio\Http\CurlClient;
+use Twilio\Rest\Client;
 
 /**
  * @Route("/event")
  */
 class EventController extends AbstractController
 {
+
+
+
     /**
      * @Route("/", name="app_event_index", methods={"GET"})
      */
@@ -29,6 +37,51 @@ class EventController extends AbstractController
     {
         return $this->render('event/index.html.twig', [
             'events' => $eventRepository->findBy(['demande_status'=>'DemandeAccepted']),
+        ]);
+    }
+
+    /**
+     * @Route("/remove_event", name="remove_event", methods={"POST"})
+     */
+    public function remove_event(Request $request,EventRepository $eventRepository): Response
+    {
+        $fs = new Filesystem();
+        $event=$eventRepository->find($request->get('dat'));
+        if($event->getImageEvent()!="defaultimage.png")
+            $fs->remove($this->getParameter('events_directory').'/'.$event->getImageEvent());
+        try {
+            $eventRepository->remove($event);
+        } catch (OptimisticLockException | ORMException $e) {
+        }
+        return $this->redirectToRoute('index_calendar', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/update_event", name="update_event", methods={"POST"})
+     */
+    public function update_event(Request $request,EventRepository $eventRepository): Response
+    {
+        $event=$eventRepository->find($request->get('dat'));
+        $event->setDateDebut(new \DateTimeImmutable($request->get('start')));
+        $event->setDateFin(new \DateTimeImmutable($request->get('end')));
+        try {
+            $eventRepository->add($event);
+        } catch (OptimisticLockException | ORMException $e) {
+        }
+        return $this->redirectToRoute('index_calendar', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/index_calendar", name="index_calendar", methods={"GET"})
+     */
+    public function index_calendar(EventRepository $eventRepository): Response
+    {
+        $clients= $this->getDoctrine()->getManager()->getRepository(User::class)->findBy(['role'=>'client']);
+        $eventTypes=$this->getDoctrine()->getManager()->getRepository(EventType::class)->findAll();
+        return $this->render('event/calendar.html.twig', [
+            'events' => $eventRepository->findBy(['demande_status'=>'DemandeAccepted']),
+            'clients'=>$clients,
+            'et'=>$eventTypes,
         ]);
     }
 
@@ -55,10 +108,18 @@ class EventController extends AbstractController
     /**
      * @Route("/listeevents", name="app_event_listeevents", methods={"GET"})
      */
-    public function listeevents(EventRepository $eventRepository,UserRepository $user): Response
+    public function listeevents(EventRepository $eventRepository,UserRepository $user,Request $request, PaginatorInterface $paginator): Response
     {
+        $donnees=$eventRepository->findBy(['demande_status'=>'DemandeAccepted','event_status'=>'publique']);
+        $events = $paginator->paginate(
+            $donnees,
+            $request->query->getInt('page', 1),
+            4
+        );
+        $session = $this->getDoctrine()->getRepository(User::class)->find(1);
         return $this->render('event/events.html.twig', [
-            'events' => $eventRepository->findBy(['demande_status'=>'DemandeAccepted','event_status'=>'publique']),
+            'events' => $events,
+            'session' => $session,
         ]);
     }
 
@@ -99,6 +160,7 @@ class EventController extends AbstractController
         ));
     }
 
+
     /**
      * @Route("/searcheventresponsable", name="searcheventresponsable", methods={"POST"})
      */
@@ -118,7 +180,7 @@ class EventController extends AbstractController
     public function new(Request $request, EventRepository $eventRepository,UserRepository $user): Response
     {
         $event = new Event();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(\App\Form\EventType::class, $event);
         $form->add('id_client',EntityType::class,
             [
                 'class' => User::class,
@@ -162,6 +224,8 @@ class EventController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
 
     /**
      * @Route("/reserver", name="app_event_reserver", methods={"GET", "POST"})
@@ -209,6 +273,32 @@ class EventController extends AbstractController
             'event' => $event,
             'types' => $et
         ]);
+    }
+
+    /**
+     * @Route("/newcalendar", name="newcalendar", methods={"GET", "POST"})
+     */
+    public function newcalendar(Request $request, EventRepository $eventRepository,EventTypeRepository $etr,UserRepository $userR): Response
+    {
+        $event = new Event();
+
+        if ($request->isMethod('POST')) {
+            $event->setImageEvent('defaultimage.png');
+            $event->setNomEvent($request->get('nom_event'));
+            $event->setEventTheme('');
+            $event->setEventStatus('publique');
+            $event->setDateDebut(new \DateTimeImmutable($request->get('start')));
+            $event->setDateFin(new \DateTimeImmutable($request->get('end')));
+            $event->setNbrParticipants($request->get('nbr'));
+            $event->setLieu($request->get('lieu'));
+            $event->setEventDescription('');
+            $event->setIdType($etr->find($request->get('event_type')));
+            $event->setIdClient($userR->find($request->get('client')));
+            $event->setIdResponsable($userR->find(1));
+            $event->setDemandeStatus("DemandeAccepted");
+            $eventRepository->add($event);
+        }
+        return $this->redirectToRoute('index_calendar', [], Response::HTTP_SEE_OTHER);
     }
 
     /**
@@ -266,7 +356,7 @@ class EventController extends AbstractController
      */
     public function edit(Request $request, Event $event, EventRepository $eventRepository): Response
     {
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(\App\Form\EventType::class, $event);
         $form->add('id_client',EntityType::class,
             [
                 'class' => User::class,
@@ -314,10 +404,13 @@ class EventController extends AbstractController
     {
         $fs = new Filesystem();
         $event=$eventRepository->find($request->get('id'));
+        if($event->getImageEvent()!="defaultimage.png")
         $fs->remove($this->getParameter('events_directory').'/'.$event->getImageEvent());
         $eventRepository->remove($event);
         return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 
     /**
      * @Route("/deletereser/{id}", name="app_event_deletereser", methods={"POST","GET"})
@@ -353,7 +446,33 @@ class EventController extends AbstractController
     {
         $event = $this->getDoctrine()->getRepository(Event::class)->find($request->get('id') + 0);
         $user = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $account_sid = 'ACb3d0e0eced06ffd7beec5ff336b6b389';
+        $auth_token = '97e5f08e9366f924058e818337714fa9';
+        $twilio_number = "+15038324523";
+        $client = new Client($account_sid, $auth_token);
+        $curlOptions = [ CURLOPT_SSL_VERIFYHOST => false, CURLOPT_SSL_VERIFYPEER => false];
+        $client->setHttpClient(new CurlClient($curlOptions));
+        $client->messages->create(
+            '+21653328112',
+            array(
+                'from' => $twilio_number,
+                'body' => 'vous avez participé a l evenement ' . $event->getNomEvent() .' De   '.$event->getDateDebut()->format('d/m/Y').'   Jusqu à   '.$event->getDateFin()->format('d/m/Y')
+            ));
         $event->addUser($user);
+        $entityManager->persist($event);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_event_listeevents');
+    }
+
+    /**
+     * @Route("/annulation_participate/{id}", name="annulation_participate", methods={"GET", "POST"})
+     */
+    public function annulation_participate(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $event = $this->getDoctrine()->getRepository(Event::class)->find($request->get('id') + 0);
+        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $event->removeUser($user);
         $entityManager->persist($event);
         $entityManager->flush();
 

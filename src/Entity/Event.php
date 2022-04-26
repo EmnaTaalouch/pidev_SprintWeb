@@ -123,9 +123,68 @@ class Event
      */
     private $image_event;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Like", mappedBy="event")
+     */
+    private $likes;
+
+
+    /**
+     * @return Collection|Like[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            if ($like->getEvent() === $this) {
+                $like->getEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isLikedByUser(User $user): bool
+    {
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isParticipatedByUser(User $user): bool
+    {
+        foreach ($this->users as $userr) {
+            if ($userr === $user) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int

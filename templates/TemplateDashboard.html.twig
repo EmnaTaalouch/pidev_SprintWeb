@@ -14,6 +14,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('dashboard/vendors/images/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('dashboard/vendors/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('dashboard/vendors/images/favicon-16x16.png') }}">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css'>
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -275,6 +276,8 @@
                         <li><a href="{{ path('app_event_listedemande') }}">Liste Demandes</a></li>
                         <li><a href="{{ path('app_event_index') }}">Liste Evenements</a></li>
                         <li><a href="{{ path('app_event_type_index') }}">Types Evenements</a></li>
+                        <li><a href="{{ path('index_calendar') }}">Calendar</a></li>
+
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -316,6 +319,9 @@
 <script src="{{ asset('dashboard/src/plugins/datatables/js/responsive.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/scripts/dashboard.js') }}"></script>
 <script src="{{ asset('validator/validback.js') }}"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js'></script>
+    <!-- add sweet alert js & css in footer -->
+
     <script src="{{ asset('dashboard/src/plugins/dropzone/src/dropzone.js') }}"></script>
     <script>
         Dropzone.autoDiscover = false;

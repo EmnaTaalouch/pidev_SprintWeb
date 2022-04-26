@@ -37,21 +37,40 @@
                             <div class="courses_item">
                                 <img src="{{ asset('uploads/events/' ~ event.imageEvent) }}" style="width: 360px;height: 220px;" alt="">
                                 <div class="hover_text">
+                                    {% if session and event.isParticipatedByUser(session) %}
+                                    <a class="cat" href="{{ path('annulation_participate', {'id': event.id }) }}">Annuler</a>
+                                    {% else %}
                                     <a class="cat" href="{{ path('event_participate', {'id': event.id }) }}">Participer</a>
+                                    {% endif %}
                                     <a href="#"><h4>{{ event.nomEvent }}</h4></a>
                                     <ul class="list">
                                         <li><a href="#"><i class="lnr lnr-users"></i> {{ event.users|length }} &nbsp; / &nbsp; {{ event.nbrParticipants }}</a></li>
 
                                         <li><a href="#"><i class="lnr lnr-user"></i> {{ event.idClient.nom ~ ' ' ~ event.idClient.prenom }}</a></li>
+                                        <li>
+                                            <a href="{{ path('post_like', {'id': event.id}) }}" class="btn btn-link js-like">
+                                                <span class="js-likes">{{event.likes | length }}</span>&nbsp;
+                                                {% if session and event.likedByUser(session) %}
+                                                    <i class="fas fa-thumbs-up"></i>
+                                                {% else %}
+                                                    <i class="far fa-thumbs-up"></i>
+                                                {% endif %}
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
+
                     </div>
 
                 </div>
+
         </div>
+            <br>
+            <br>
+            <div class="navigation" style="position:relative;left:350px">  {{ knp_pagination_render(events) }} </div>
     </div>
 </section>
 <script>
@@ -67,4 +86,29 @@
         });
     }
 </script>
+<script>
+
+        const LIKE_ICON = 'far fa-thumbs-up';
+        const UNLIKE_ICON = 'fas fa-thumbs-up';
+
+        Array.from(document.querySelectorAll('a.js-like')).forEach(function (link) {
+            link.addEventListener('click', onClickLink);
+        });
+
+        async function onClickLink(event) {
+            event.preventDefault();
+            const url = this.href;
+            const icone = this.querySelector('i');
+            const count = this.querySelector('span.js-likes');
+
+            try {
+                const result = await axios.post(url);
+                const data = result.data;
+                icone.className = icone.className === LIKE_ICON ? UNLIKE_ICON : LIKE_ICON;
+                count.textContent = data.likes;
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    </script>
 {% endblock %}
