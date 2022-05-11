@@ -1,0 +1,20 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}Rating Edit{% endblock %}
+
+{% block body %}
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div      >
+            {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn-success">Submit </button>
+            {{ form_end(form) }}
+        </div>
+{% endblock %}

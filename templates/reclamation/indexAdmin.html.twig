@@ -1,0 +1,38 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Reclamations{% endblock %}
+
+{% block body %}
+
+    <br>
+    <a href="{{ path('app_reclamation_index') }}" class="btn btn-info">Reclamation Front</a>
+    <br>
+    <br>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Description</th>
+            <th scope="col">image</th>
+            <th scope="col">Date Creation</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reclamation in reclamations %}
+            <tr>
+                <td>{{ reclamation.id }}</td>
+                <td>{{ reclamation.description }}</td>
+                <td>
+                    <img width="100" height="100" src="{{ asset('uploads/images/') }}{{ reclamation.image }}" >
+                </td>
+                <td>{{ reclamation.DateReclamation|date('d-m-Y')}}</td>
+                <td>
+                    <a href="/reponse/new/{{ reclamation.id }}" class="btn btn-warning">Repondre</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

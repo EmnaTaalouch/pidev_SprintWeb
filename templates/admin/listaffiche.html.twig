@@ -1,0 +1,145 @@
+{% extends 'TemplateDashboard.html.twig' %}
+{% block body %}
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+<h4 class="card-title"> User's List  </h4>
+    <div>
+
+    </div>
+    <div class="card-header">
+        <a class="btn btn-success" href="{{ path('addUser') }}">Add User</a>
+
+    </div>
+
+    <input type="text" id="search" class="form-control fas fa-search" placeholder="Search">
+
+<div class="table-responsive">
+    <table id="t" class="table table-striped">
+    <tr>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">ID</td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Name</td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Last Name</td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Role</td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Email </td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Status </td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Edit </td>
+        <td class="sorting_asc" tabindex="0" scope="col" aria-controls="example2" rowspan="1" colspan="1">Delete </td>
+    </tr>
+        <tbody id="all">
+    {% for i in tabadmin %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.nom }}</td>
+            <td>{{ i.prenom }}</td>
+            <td>{{ i.role}}</td>
+            <td>{{ i.login }}</td>
+                {% if i.state == 0 %}
+            <td>
+                <form action="{{ path('diableUser',{'id':i.id}) }}">
+                    <button class="btn btn-outline-danger btn-fw">
+                        Disable
+                    </button>
+                </form>
+            </td>
+            {% elseif i.state == 1 %}
+                <td>
+                    <form action="{{ path('enableUser',{'id':i.id}) }}">
+                        <button class="btn btn-outline-success btn-fw">
+                            Enable
+                        </button>
+                    </form>
+                </td>
+            {% endif %}
+
+            {% if i.role =="admin" %}
+            <td>
+                <a class="btn btn-primary" href="{{ path('update',{'id':i.Id}) }}" >Update</a>
+            </td>
+            {% elseif i.role =="client" %}
+            <td>
+            </td>
+            {% endif %}
+
+
+            <td>
+
+                <form method="post" action="{{ path('remove', {'id':i.Id}) }}" onsubmit="return confirm('Etes vous sur de vouloir supprimer le user ?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ i.id) }}">
+                    <button class="btn btn-danger ">Remove</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+        </tbody>
+        {{ knp_pagination_render(tabadmin) }}
+        <tbody id="search">
+        </tbody>
+    </table>
+
+</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#search").keyup(function (e) {
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $(this).val();
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                    url: "{{ path('search_user') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type: 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue': value
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                    success: function (retour) {
+                        //console.log(retour);
+                        if (retour) {
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(retour), function (i, obj) {
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append(
+                                    ' <tr></td><td>    ' + obj.id + '' +
+                                    '  </td><td>' + obj.Nom + '' +
+                                    '  </td><td>' + obj.Prenom + '' +
+                                    '  </td><td>' + obj.role + '' +
+                                    '  </td><td>' + obj.login + '' +
+                                    ' </td><td>  <a class="btn btn-outline-danger btn-fw" href="/DisableUser/'+obj.id+'">Disable</a>'+
+                                    ' </td><td>  <a class="btn btn-primary" href="/update/'+obj.id+'">Update</a>'+
+                                    ' </td><td>  <a class="btn btn-danger" href="/remove/'+obj.id+'">Remove</a>'+
+                                    '  </td></tr>');
+                            });
+                            ///TapToTrip/Gestion/public/index.php
+                        } else {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+            });
+        }); 
+    </script>
+        {% endblock %}

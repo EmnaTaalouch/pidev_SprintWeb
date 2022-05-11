@@ -6,6 +6,8 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
@@ -20,31 +22,52 @@ class Event
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Le Champ nom est obligatoire !")
+     * @Assert\Length(
+     *     min=4,
+     *     max=20,
+     *     minMessage="Le nom doit contenir au moins 4 carcatères ",
+     *     maxMessage="Le nom doit contenir au plus 20 carcatères"
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $nom_event;
 
     /**
+     * @Assert\NotBlank(message="Le Champ description est obligatoire !")
+     * @Assert\Length(
+     *     min=5,
+     *     minMessage="La description doit au moins contenir 5 cacartères  "
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $event_description;
 
     /**
+     * @Assert\NotBlank(message="Le Champ theme est obligatoire !")
      * @ORM\Column(type="string", length=255)
      */
     private $event_theme;
 
     /**
-     * @ORM\Column(type="date")
+     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le Champ date est obligatoire !")
+     * @Assert\GreaterThanOrEqual("today",message="La date du debut doit etre superieure ala date actuelle")
+     * @ORM\Column(name="date_debut", type="datetime_immutable")
      */
     private $date_debut;
 
     /**
-     * @ORM\Column(type="date")
+     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le Champ date est obligatoire !")
+     * @Assert\GreaterThanOrEqual(propertyPath="dateDebut",
+    * message="La date du fin doit être supérieure à la date début")
+     * @ORM\Column(name="date_fin", type="datetime_immutable")
      */
     private $date_fin;
 
     /**
+     * @Assert\NotBlank(message="Le Champ status est obligatoire !")
      * @ORM\Column(type="string", length=255)
      */
     private $event_status;
@@ -55,17 +78,22 @@ class Event
     private $demande_status;
 
     /**
+     * @Assert\NotBlank(message="Le Champ client est obligatoire !")
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="events")
+     * @ORM\JoinColumn(name="id_client")
      */
     private $id_client;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="events")
+     * @ORM\JoinColumn(name="id_responsable" , nullable=true)
      */
     private $id_responsable;
 
     /**
+     * @Assert\NotBlank(message="Le Champ type est obligatoire !")
      * @ORM\ManyToOne(targetEntity=EventType::class, inversedBy="events")
+     * @ORM\JoinColumn(name="id_type")
      */
     private $id_type;
 
@@ -75,11 +103,17 @@ class Event
     private $users;
 
     /**
+     * @Assert\NotBlank(message="Le Champ nombre de participants est obligatoire !")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="la valeur {{ value }} doit etre de type {{ type }} !"
+     * )
      * @ORM\Column(type="integer")
      */
     private $nbr_participants;
 
     /**
+     * @Assert\NotBlank(message="Le Champ lieu est obligatoire !")
      * @ORM\Column(type="string", length=255)
      */
     private $lieu;
@@ -89,9 +123,68 @@ class Event
      */
     private $image_event;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Like", mappedBy="event")
+     */
+    private $likes;
+
+
+    /**
+     * @return Collection|Like[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            if ($like->getEvent() === $this) {
+                $like->getEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isLikedByUser(User $user): bool
+    {
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isParticipatedByUser(User $user): bool
+    {
+        foreach ($this->users as $userr) {
+            if ($userr === $user) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,24 +228,24 @@ class Event
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    public function getDateDebut(): ?\DateTimeImmutable
     {
         return $this->date_debut;
     }
 
-    public function setDateDebut(\DateTimeInterface $date_debut): self
+    public function setDateDebut(\DateTimeImmutable $date_debut): self
     {
         $this->date_debut = $date_debut;
 
         return $this;
     }
 
-    public function getDateFin(): ?\DateTimeInterface
+    public function getDateFin(): ?\DateTimeImmutable
     {
         return $this->date_fin;
     }
 
-    public function setDateFin(\DateTimeInterface $date_fin): self
+    public function setDateFin(\DateTimeImmutable $date_fin): self
     {
         $this->date_fin = $date_fin;
 

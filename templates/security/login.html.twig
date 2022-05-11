@@ -1,0 +1,67 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+{% block body %}
+
+    <div class="hero-wrap js-fullheight" >
+        <div class="overlay"></div>
+        <div class="container">
+
+            {% for message in app.flashes('message') %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('warning') %}
+                <div class="alert alert-warning" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for flashError in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+            {% endfor %}
+            
+                                <form action="{{ path('app_login') }}" method="post"  class="contact__form">
+                                    <div class="row d-flex justify-content-center">
+                                        <p>You already have an account? Great! Login here.</p>
+                                        {% if error %}
+                                            <div class="n col-lg-6 col-md-8 p-1 m-1 alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                        {% endif %}
+                                        <div class="col-lg-6 col-md-8 p-1 m-1">
+                                            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-8 p-1 m-1">
+                                            <input type="password" name="password" id="inputPassword" class="form-control bg-transparent" placeholder="Password" required>
+                                            <input type="hidden" name="_csrf_token"
+                                                   value="{{ csrf_token('authenticate') }}"
+                                            >
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+
+                                        <div>
+                                            <button type="submit" class="btn btn-primary py-3 px-5">Sign IN</button>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="p-3 m-3">
+                                            <p>Don't have an account? <b><a style="color:#000b16" href="{{ path('app_register') }}" >Register Now</a></b></p>
+                                            <p>Forget password? It's ok.<b><a style="color:#000b16" href="{{ path('app_forgotten_password') }}" >Recover here</a></b></p>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+{% endblock %}

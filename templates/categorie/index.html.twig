@@ -1,0 +1,28 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Categories{% endblock %}
+
+{% block body %}
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for categorie in categories %}
+            <tr>
+                <td>{{ categorie.id }}</td>
+                <td>{{ categorie.role }}</td>
+                <td>
+                    <a  href="{{ path('app_categorie_edit',{'id':categorie.id}) }}" class="btn btn-warning">Edit</a>
+                    <a href="/categorie/delete/{{ categorie.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer ?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

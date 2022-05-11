@@ -1,0 +1,40 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}All Relationnels{% endblock %}
+
+{% block body %}
+
+<div>
+    <br>
+    <br>
+    <br>
+</div>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Description</th>
+            <th scope="col">image</th>
+            <th scope="col">Categorie</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for relationnel in relationnels %}
+            <tr>
+                <td>{{ relationnel.nom }}</td>
+                <td>{{ relationnel.description }}</td>
+                <td>
+                    <img width="100" height="100" src="{{ asset('uploads/images/') }}{{ relationnel.image }}" >
+                </td>
+                <td>{{ relationnel.categorie.role }}</td>
+                <td>{{ relationnel.rating |rating}}</td>
+                <td>
+                    <a href="/relationnel/editRating/{{ relationnel.id }}" class="btn btn-warning">Avis</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

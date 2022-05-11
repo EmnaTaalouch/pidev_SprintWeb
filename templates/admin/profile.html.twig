@@ -1,0 +1,84 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+    <div class="hero-wrap js-fullheight">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center " data-scrollax-parent="true">
+                            <div class="row align-items-stretch no-gutters contact-wrap">
+                                <div class="col-md-12">
+                                    <div class="form h-100">
+                                        {% for message in app.flashes('message') %}
+                                            <div class="alert alert-success" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for message in app.flashes('warning') %}
+                                            <div class="alert alert-warning" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for message in app.flashes('danger') %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for flashError in app.flashes('verify_email_error') %}
+                                            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                                        {% endfor %}
+                                        {{ form_start(formprofile,{'attr':{'novalidate': 'novalidate'}}) }}
+                                        <form  method="post"  class="contact__form">
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-lg-8 col-md-8 d-flex justify-content-center">
+                                                    <p>Hello {{ app.user.nom }} {{ app.user.prenom }}</p>
+                                                </div>
+                                                <div class="col-lg-8 col-md-8 d-flex justify-content-center">
+                                                    <p>You can edit your profile here.</p>
+                                                </div>
+                                                <div class="col-lg-6 col-md-8 p-1 m-1">
+                                                    {{ form_errors(formprofile.nom)}}
+                                                    {{ form_widget(formprofile.nom,{ 'attr': {'class': 'form-control', 'placeholder' : 'Name' }}) }}
+                                                </div>
+                                                <div class="col-lg-6 col-md-8 p-1 m-1">
+                                                    {{ form_errors(formprofile.prenom)}}
+                                                    {{ form_widget(formprofile.prenom,{ 'attr': {'class': 'form-control', 'placeholder' : 'Last Name'}}) }}
+                                                </div>
+                                                <div class="col-lg-6 col-md-8 p-1 m-1">
+                                                    {{ form_errors(formprofile.login)}}
+                                                    {{ form_widget(formprofile.login,{ 'attr': {'class': 'form-control', 'placeholder' : 'Email Adress'}}) }}
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-8 p-1 m-1" >
+                                                    {{ form_errors(formprofile.password)}}
+                                                    {{ form_widget(formprofile.password,{ 'attr': {'class': 'form-control', 'placeholder' : 'Password'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center p-1 m-1">
+
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div class="p-3 m-3">
+                                                    <p style="color:black">Do you want to quit? <b><a style="color:black" href="{{ path('app_logout') }}" >Logout here</a></b>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                        {{ form_end(formprofile) }}
+                                    </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

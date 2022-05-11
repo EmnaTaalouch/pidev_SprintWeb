@@ -1,0 +1,52 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Reponse{% endblock %}
+
+{% block body %}
+
+    <div>
+        <br>
+    </div>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Description</th>
+            <th scope="col">image</th>
+            <th scope="col">Date Creation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ reclamations.id }}</td>
+            <td>{{ reclamations.description }}</td>
+            <td>
+                <img width="100" height="100" src="{{ asset('uploads/images/') }}{{ reclamations.image }}" >
+            </td>
+            <td>{{ reclamations.DateReclamation|date('d-m-Y')}}</td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Reponse</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.text }}</td>
+                <td>
+                    <a href="/reponse/edit/{{ reponse.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/reponse/delete/{{ reponse.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer ?');">Delete</a>
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

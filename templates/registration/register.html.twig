@@ -1,0 +1,86 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="hero-wrap js-fullheight">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center " data-scrollax-parent="true">
+                            <div class="row align-items-stretch no-gutters contact-wrap">
+                                <div class="col-md-12">
+                                    <div class="form h-100">
+                                        {% for message in app.flashes('message') %}
+                                            <div class="alert alert-success" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for message in app.flashes('warning') %}
+                                            <div class="alert alert-warning" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for message in app.flashes('danger') %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for flashError in app.flashes('verify_email_error') %}
+                                            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                                        {% endfor %}
+                                        {{ form_start(registrationForm,{'attr':{'novalidate': 'novalidate'}}) }}
+                                        <form  method="post"  class="contact__form">
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-lg-8 col-md-8 d-flex justify-content-center">
+                                                    <p style="color:black">Sign Up in Seconds!</p>
+                                                </div>
+                                                <div class="col-lg-8 col-md-8 d-flex justify-content-center">
+                                                    <p style="color:black">Signup using your Email address</p>
+                                                </div>
+                                                <div class="col-lg-6 col-md-8 p-1 m-1">
+                                                    {{ form_errors(registrationForm.nom)}}
+                                                    {{ form_widget(registrationForm.nom,{ 'attr': {'class': 'form-control', 'placeholder' : 'Name'}}) }}
+                                                </div>
+                                                <div class="col-lg-6 col-md-8 p-1 m-1">
+                                                    {{ form_errors(registrationForm.prenom)}}
+                                                    {{ form_widget(registrationForm.prenom,{ 'attr': {'class': 'form-control', 'placeholder' : 'Last Name'}}) }}
+                                                </div>
+                                                
+
+                                                <div class="col-lg-6 col-md-8 p-1 m-1" >
+                                                    {{ form_errors(registrationForm.login)}}
+                                                    {{ form_widget(registrationForm.login,{ 'attr': {'class': 'form-control', 'placeholder' : 'Email Adress'}}) }}
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-8 p-1 m-1">
+                                                    {{ form_errors(registrationForm.password)}}
+                                                    {{ form_widget(registrationForm.password,{ 'attr': {'class': 'form-control', 'placeholder' : 'Password', 'id' : ''}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center p-1 m-1">
+
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary">Sign UP</button>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div class="p-3 m-3">
+                                                    <p style="color:black">Your already have an account? <b><a style="color:black" href="{{ path('app_login') }}" >Login here</a></b>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                        {{ form_end(registrationForm) }}
+                                    </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+<div class="row courses_inner" id="show">
+    <div class="col-lg-12">
+        <div class="grid_inner">
+            {% for event in events %}
+                <div class="grid_item wd44">
+                    <div class="courses_item">
+                        <img src="{{ asset('uploads/events/' ~ event.imageEvent) }}" style="width: 360px;height: 220px;" alt="">
+                        <div class="hover_text">
+                            <a class="cat" href="{{ path('event_participate', {'id': event.id }) }}">Participer</a>
+                            <a href="#"><h4>{{ event.nomEvent }}</h4></a>
+                            <ul class="list">
+                                <li><a href="#"><i class="lnr lnr-users"></i> {{ event.users|length }} &nbsp; / &nbsp; {{ event.nbrParticipants }}</a></li>
+
+                                <li><a href="#"><i class="lnr lnr-user"></i> {{ event.idClient.nom ~ ' ' ~ event.idClient.prenom }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>

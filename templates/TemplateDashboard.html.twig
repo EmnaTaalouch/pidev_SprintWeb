@@ -26,8 +26,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/src/plugins/datatables/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/src/plugins/datatables/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/vendors/styles/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/starrating/css/rating.css') }}" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" integrity="sha256-5veQuRbWaECuYxwap/IOE/DAwNxgm4ikX7nrgsqYp88=" crossorigin="anonymous">
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -40,7 +42,8 @@
 
 </head>
 <body>
-<div class="pre-loader">
+<!--
+ <div class="pre-loader">
     <div class="pre-loader-box">
         <div class="loader-logo"><img src="{{ asset('dashboard/vendors/images/deskapp-logo.svg') }}" alt=""></div>
         <div class='loader-progress' id="progress_div">
@@ -52,6 +55,9 @@
         </div>
     </div>
 </div>
+
+ -->
+
 
 <div class="header">
     <div class="header-left">
@@ -266,23 +272,50 @@
     <div class="menu-block customscroll">
         <div class="sidebar-menu">
             <ul id="accordion-menu">
-                <li class="dropdown">
+            <li class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle">
-                        <span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
+                        <span class="micon dw dw-house-1"></span><span class="mtext">Gestion User</span>
                     </a>
                     <ul class="submenu">
-                        <li><a href="index.html">Dashboard style 1</a></li>
-                        <li><a href="index2.html">Dashboard style 2</a></li>
+                        <li><a href="{{ path('adminlist') }}">User</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle">
-                        <span class="micon dw dw-calendar1"></span><span class="mtext">Forms</span>
+                        <span class="micon dw dw-house-1"></span><span class="mtext">Gestion Relationnel</span>
                     </a>
                     <ul class="submenu">
-                        <li><a href="form-basic.html">Form Basic</a></li>
-                        <li><a href="advanced-components.html">Advanced Components</a></li>
-                        <li><a href="form-wizard.html">Form Wizard</a></li>
+                        <li><a href="{{ path('app_categorie_index') }}">Categorie</a></li>
+                        <li><a href="{{ path('app_relationnel_index_admin') }}">Relationnel</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon dw dw-house-1"></span><span class="mtext">Gestion Reclamation</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{{ path('app_reclamation_index_admin') }}">Reclamation</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon dw dw-house-1"></span><span class="mtext">Gestion Comptabilite</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{{ path('app_type_comptabilite_index_admin') }}">Type Comptabilite</a></li>
+                        <li><a href="{{ path('app_comptabilite_index') }}">Comptabilite</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon dw dw-calendar"></span><span class="mtext">Gestion Evenement</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{{ path('app_event_listedemande') }}">Liste Demandes</a></li>
+                        <li><a href="{{ path('app_event_index') }}">Liste Evenements</a></li>
+                        <li><a href="{{ path('app_event_type_index') }}">Types Evenements</a></li>
+                        <li><a href="{{ path('index_calendar') }}">Calendar</a></li>
+
                     </ul>
                 </li>
 
@@ -313,6 +346,10 @@
 <script src="{{ asset('dashboard/src/plugins/datatables/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('dashboard/src/plugins/datatables/js/responsive.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/scripts/dashboard.js') }}"></script>
+    <script src="{{ asset('validator/validback.js') }}"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js'></script>
+    <script src="{{ asset('bundles/starrating/js/rating.js') }}"></script>
+
 {% endblock %}
 </body>
 </html>

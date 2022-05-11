@@ -1,0 +1,43 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Type{% endblock %}
+
+{% block body %}
+
+    <div id="div_chart"></div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        {{ gc_draw(piechart, 'div_chart') }}
+    </script>
+    <br>
+    <a class="btn btn-info"  href="{{ path('app_type_comptabilite_new') }}" >Creer Type Comptabilite</a>
+    <a class="btn btn-info" href="{{ path('export') }}">Exporter Excel</a>
+    <a class="btn btn-info" href="{{ path('app_type_comptabilite_index') }}" >Type Comptabilite Front</a>
+
+    <br>
+    <br>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Type</th>
+            <th scope="col">Montant</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for typecompt in typecompts %}
+            <tr>
+                <td>{{ typecompt.id }}</td>
+                <td>{{ typecompt.type }}</td>
+                <td>{{ typecompt.montant }}</td>
+                <td>
+                    <a href="/typecomptabilite/edit/{{ typecompt.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/typecomptabilite/delete/{{ typecompt.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer ?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

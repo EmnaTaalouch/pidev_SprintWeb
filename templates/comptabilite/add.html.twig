@@ -1,0 +1,13 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}Type Add{% endblock %}
+
+{% block body %}
+
+        <div class="row mt40">
+            {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn-success">Créer </button>
+            {{ form_end(form) }}
+        </div>
+{% endblock %}

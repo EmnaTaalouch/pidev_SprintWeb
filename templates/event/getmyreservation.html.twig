@@ -1,0 +1,95 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}My Reservation Event{% endblock %}
+
+{% block body %}
+
+<div class="whole-wrap">
+    <div class="container">
+    <div class="section-top-border">
+        <h3 class="mb-30 title_color generic-blockquote">Mes Reservation</h3>
+        <div class="d-flex justify-content-between bd-highlight mb-3">
+            <div class="p-2 bd-highlight">
+
+                        <div class="input-group">
+                            <input class="input--style-4" placeholder="Search..." id="nomevent" onkeyup="actionnom()"   name="description" />
+                        </div>
+
+                </div>
+            <div class="p-2 bd-highlight">
+                <div class="input-group">
+
+                    <div class="js-select-simple select--no-search" >
+                        <select name="event_type" id="demande" onchange="action()"  style="width: 220px">
+                            <option disabled="disabled" selected="selected">Filtrage par demande</option>
+                            <option value="DemandePending">Demande Pending</option>
+                            <option value="DemandeAccepted">Demande Accepted</option>
+                            <option value="DemandeRefused">Demande Refused</option>
+
+                        </select>
+                        <div class="select-dropdown"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="progress-table-wrap">
+            <div class="progress-table" id="show">
+                <div class="table-head ">
+                    <div class="country">Nom Evenement</div>
+                    <div class="visit">Type Event</div>
+                    <div class="visit">Date</div>
+                    <div class="country">Status Evenement</div>
+                    <div class="visit">Lieu</div>
+                    <div class="visit">Participants</div>
+                    <div class="visit">Demande Status</div>
+                    <div class="visit"></div>
+                </div>
+                {% for event in events %}
+                <div class="table-row">
+                    <div class="country">{{ event.nomEvent }}</div>
+                    <div class="visit">{{ event.idType.libelle }}</div>
+                    <div class="visit">{{ event.dateDebut|date('Y-m-d') }} <br> {{ event.dateFin|date('Y-m-d') }}</div>
+                    <div class="country">{{ event.eventStatus }}</div>
+                    <div class="visit">{{ event.lieu }}</div>
+                    <div class="visit">{{ event.nbrParticipants }}</div>
+                    <div class="visit">{{ event.demandeStatus }}</div>
+                    <div class="visit">
+                        {% if event.demandeStatus == 'DemandePending' %}
+                        &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                        <a href="{{ path('app_event_editreserver', {'id': event.id}) }}"><span style="color: orange;" class="lnr lnr-undo"></span></a> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <a href="{{ path('app_event_deletereser', {'id': event.id}) }}"><span style="color: red" class="lnr lnr-exit-up"></span></a>
+                        {% endif %}
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+    <script>
+        function action(){
+            var sch=$("#demande").val();
+            $.ajax({
+                url: "{{ path('demandesearch') }}",
+                data:{dat: sch},
+                type: "POST",
+                success: function(data){
+                    $('#show').html(data).show();
+                }
+            });
+        }
+        function actionnom(){
+            var sch=$("#nomevent").val();
+            $.ajax({
+                url: "{{ path('searchevent') }}",
+                data:{nom: sch},
+                type: "POST",
+                success: function(data){
+                    $('#show').html(data).show();
+                }
+            });
+        }
+    </script>
+{% endblock %}

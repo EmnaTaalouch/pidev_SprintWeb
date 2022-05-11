@@ -1,0 +1,141 @@
+{% extends 'TemplateFront.html.twig' %}
+
+{% block title %}Reserver Event{% endblock %}
+
+{% block body %}
+
+    <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-4">
+                <div class="card-body">
+                    <h2 class="title">Reservation Form</h2>
+                    <form method="post" name="f" enctype="multipart/form-data" onsubmit="return validator();" >
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="label">Nom Evenement</label>
+                                    <input class="input--style-4" value="{{ event.nomEvent }}" id="nom_event" type="text" name="nom_event">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="label">Theme</label>
+                                    <input class="input--style-4" value="{{ event.eventTheme }}" id="theme_event" type="text" name="theme_event">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="label">Date debut</label>
+                                    <div class="input-group-icon">
+                                        <input class="input--style-4" style="width: 250px;" value="{{ event.dateDebut|date() }}" id="date_debut" autocomplete="off" type="datetime-local" name="date_debut">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="label">Date fin</label>
+                                    <div class="input-group-icon">
+                                        <input class="input--style-4"autocomplete="off" style="width: 250px;" id="date_fin" value="{{ event.dateFin|date() }}"  type="datetime-local"  name="date_fin">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="label">Nombre de participants</label>
+                                    <input class="input--style-4" min="0" value="{{ event.nbrParticipants }}" id="nbr_participants" type="number" name="nbr_participants">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label class="label">Lieu</label>
+                                    <input class="input--style-4" value="{{ event.lieu }}" id="lieu" type="text" name="lieu">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <label class="label">Description</label>
+                                    <textarea class="input--style-4"  id="description"  name="description">{{ event.eventDescription }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-6">
+                            <div class="input-group">
+                                <label class="label">Status</label>
+                                <div class="p-t-10">
+                                    <label class="radio-container m-r-45">Publique
+                                        {% if event.eventStatus == 'publique' %}
+                                            <input type="radio" checked="checked"  value="publique" name="status">
+                                        {% else %}
+                                            <input type="radio"   value="publique" name="status">
+                                        {% endif %}
+
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="radio-container">Privée
+                                        {% if event.eventStatus == 'privé' %}
+                                            <input type="radio" checked="checked"  value="privé" name="status">
+                                        {% else %}
+                                            <input type="radio"   value="privé" name="status">
+                                        {% endif %}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-md-4">
+                        <div class="input-group">
+                            <label class="label">Type Evenement</label>
+                            <div class="rs-select2 js-select-simple select--search" >
+                                <select name="event_type" id="event_type" >
+                                    {% for t in types %}
+                                    <option value="{{ t.id }}">{{ t.libelle }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="select-dropdown"></div>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-floating">
+
+                                    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+                                    <div class="file-upload">
+                                        <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Ajouter image de l'evenement</button>
+
+                                        <div class="image-upload-wrap" style="display: none;">
+                                            <input class="file-upload-input" value="{{ event.imageEvent }}" type='file' id="val" name="image_event" accept="image/*" onchange="readURL(this);"  />
+                                            <div class="drag-text">
+                                                <h3>Drag and drop a file or select add Image</h3>
+                                            </div>
+                                        </div>
+                                        <div class="file-upload-content" style="display: block;">
+                                            <img class="file-upload-image" src="{{ asset('uploads/events' ~ event.imageEvent) }}" alt="your image" />
+                                            <div class="image-title-wrap">
+                                                <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">{{ event.imageEvent }}</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-t-15">
+                            <button class="btn btn--radius-2 btn--green" type="submit">Modifier Reserver</button>
+                        </div>
+                    </form>
+                    <div id="toast"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

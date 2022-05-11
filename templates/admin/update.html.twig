@@ -1,0 +1,37 @@
+{% extends 'TemplateDashboard.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% endblock %}
+{% block body %}
+    {{ form_start(formuser,{'attr':{'novalidate': 'novalidate'}}) }}
+            <form>
+                <div class="form-group">
+                    <div class="col-lg-6 col-md-8 p-1 m-1">
+                        {{ form_errors(formuser.nom)}}
+                        {{ form_widget(formuser.nom,{ 'attr': {'class': 'form-control', 'placeholder' : 'Name'}}) }}
+                    </div>
+                    <div class="col-lg-6 col-md-8 p-1 m-1">
+                        {{ form_errors(formuser.prenom)}}
+                        {{ form_widget(formuser.prenom,{ 'attr': {'class': 'form-control', 'placeholder' : 'Last Name'}}) }}
+                    </div>
+                    
+
+                    <div class="col-lg-6 col-md-8 p-1 m-1" >
+                        {{ form_errors(formuser.login)}}
+                        {{ form_widget(formuser.login,{ 'attr': {'class': 'form-control', 'placeholder' : 'Email Adress'}}) }}
+                    </div>
+
+                    <div class="col-lg-6 col-md-8 p-1 m-1">
+                        {{ form_errors(formuser.password)}}
+                        {{ form_widget(formuser.password,{ 'attr': {'class': 'form-control', 'placeholder' : 'Password', 'id' : ''}}) }}
+                    </div>
+                    
+                </div>
+                <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+                <a class="btn btn-success" href="{{ path('adminlist') }}">Back to list</a>
+            </form>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

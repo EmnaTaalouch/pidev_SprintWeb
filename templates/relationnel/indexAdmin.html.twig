@@ -1,0 +1,200 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}All Relationnels{% endblock %}
+
+{% block body %}
+
+    <a href="{{ path('app_relationnel_new') }}" class="btn btn-info">Creer Relationnel</a>
+    <a href="{{ path('app_relationnel_index') }}" class="btn btn-info">Relationnel Front</a>
+    <br>
+    <br>
+    <div id="divs">
+        <input class="form-control" type="text" id="search" placeholder="🔍">
+        <a style="color:#FF0000;" class="tg-btn" href="" id="idup">UP ⬆️</a>
+        <a style="color:#25DD28;" class="tg-btn" href="" id="iddown">DOWN ⬇️</a>
+    </div>
+
+    <br>
+    <table id="t" class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Description</th>
+            <th scope="col">image</th>
+            <th scope="col">Categorie</th>
+            <th scope="col">Rating</th>
+
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody id="all">
+        {% for relationnel in relationnels %}
+            <tr>
+                <td>{{ relationnel.id }}</td>
+                <td>{{ relationnel.nom }}</td>
+                <td>{{ relationnel.description }}</td>
+                <td>
+                    <img width="100" height="100" src="{{ asset('uploads/images/') }}{{ relationnel.image }}" >
+                </td>
+                <td>{{ relationnel.categorie.role }}</td>
+                <td>{{ relationnel.rating|rating}}</td>
+                <td>
+                    <a href="/relationnel/pdf/{{ relationnel.id }}" class="btn btn-info">PDF</a>
+                    <a href="/relationnel/edit/{{ relationnel.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/relationnel/delete/{{ relationnel.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer ?');">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tbody id="search">
+        </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script>
+        $( document ).ready(function() {
+
+            /*begin rechercher avancee multicritéres selon sujet et staus*/
+            $("#divs").keyup(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                if(value.length >= 2 || value.length == 0  )
+                {
+                    //    alert(value);
+                    /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                    $.ajax({
+                        /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                        url : "{{ path('search_rela') }}",
+                        /* La méthode utilisée pour transférer les données est GET */
+                        type : 'GET',
+                        /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                        data: {
+                            'searchValue' : value,
+                        },
+                        /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                        success : function(retour){
+                            if(retour){
+                                $('#t tbody#search').empty();
+                                $.each(JSON.parse(retour), function(i, obj) {
+                                    $('#t tbody#all').hide();
+                                    $('#t tbody#search').append('<tr><td> '+obj.id +'  </td><td>    '+obj.nom+'  </td><td>'+obj.description+' </td><td><img width="100" height="100" src="{{ asset('uploads/images/') }}'+obj.image+'" > </td> <td>'+obj.categorie.role+'</td><td>'+obj.rating+'</td><td><a href="/relationnel/pdf/'+obj.id+'" class="btn btn-info">PDF</a><a href="/relationnel/edit/'+obj.id+'" class="btn btn-warning">Edit</a> <a href="/relationnel/delete/'+obj.id+'" class="btn btn-danger" onclick="return confirm('+"Etes-vous sûr de supprimer ?"+');">Delete</a> </td>   </tr>');
+                                });
+                            }
+                            else
+                            {
+
+                                $('#t tbody#all').show();
+                                $('#t tbody#search').empty();
+                                $('#t tbody#search').fadeIn('fast');
+
+                            }
+                        },
+                    });
+                    return false;
+                }
+            });
+            /*end rechercher avancee multicritéres selon sujet et staus*/
+
+
+            /*begin trie up selon id*/
+            $("#idup").click(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                var value3 ="ASC";
+
+                //    alert(value);
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                    url : "{{ path('search_rela') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type : 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue' : value,
+                        'orderid': value3
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                    success : function(retour){
+                        if(retour){
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(retour), function(i, obj) {
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append(
+                                    '<tr>' +
+                                    '<td> '+obj.id +'  </td>' +
+                                    '<td>    '+obj.nom+'  </td>' +
+                                    '<td>'+obj.description+' </td>' +
+                                    '<td><img width="100" height="100" src="{{ asset('uploads/images/') }}'+obj.image+'" > </td>' +
+                                    '<td>'+obj.categorie.role+'</td><td>'+obj.rating+'</td>' +
+                                    '<td>' +
+                                    '<a href="/relationnel/pdf/'+obj.id+'" class="btn btn-info">PDF</a>' +
+                                    '<a href="/relationnel/edit/'+obj.id+'" class="btn btn-warning">Edit</a>' +
+                                    '<a href="/relationnel/delete/'+obj.id+'" class="btn btn-danger" onclick="return confirm('+"Etes-vous sûr de supprimer ?"+');">Delete</a>' +
+                                    '</td>' +
+                                    '</tr>');
+                            });
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+
+            });
+            /*end trie up selon id*/
+
+            /*begin trie down selon id*/
+            $("#iddown").click(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                var value3 ="DESC";
+
+                //    alert(value);
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                    url : "{{ path('search_rela') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type : 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue' : value,
+                        'orderid': value3
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                    success : function(retour){
+                        if(retour){
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(retour), function(i, obj) {
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append('<tr><td> '+obj.id +'  </td><td>    '+obj.nom+'  </td><td>'+obj.description+' </td><td><img width="100" height="100" src="{{ asset('uploads/images/') }}'+obj.image+'" > </td> <td>'+obj.categorie.role+'</td><td>'+obj.rating+'</td><td><a href="/relationnel/pdf/'+obj.id+'" class="btn btn-info">PDF</a><a href="/relationnel/edit/'+obj.id+'" class="btn btn-warning">Edit</a> <a href="/relationnel/delete/'+obj.id+'" class="btn btn-danger" onclick="return confirm('+"Etes-vous sûr de supprimer ?"+');">Delete</a> </td>   </tr>');
+                            });
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+
+            });
+            /*end trie down selon id*/
+        });
+    </script>
+
+
+{% endblock %}

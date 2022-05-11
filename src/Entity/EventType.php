@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EventTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,10 +21,12 @@ class EventType
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string",nullable=true, length=255)
      */
     private $libelle;
-
+    public function __toString() :string {
+        return $this->libelle;
+    }
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="id_type")
      */

@@ -1,0 +1,108 @@
+
+<!-- Default Basic Forms Start -->
+<div class="pd-20 card-box mb-30">
+    <div class="clearfix">
+        <div class="pull-left">
+            <h4 class="text-blue h4">Event Form</h4>
+            <p class="mb-30">{{ label|default('Ajouter') }} un evenement </p>
+        </div>
+    </div>
+
+    {{ form_start(form,{attr:{novalidate:'novalidate'}})  }}
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Nom evenement</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.nom_event,{'attr': {'placeholder':'Nom event','class':'form-control'}}) }}
+            {{ form_errors(form.nom_event,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Theme</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.event_theme,{'attr': {'placeholder':'Event theme','class':'form-control'}}) }}
+            {{ form_errors(form.event_theme,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Date debut</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.date_debut,{'attr': {'placeholder':'Date debut','class':'form-control'}}) }}
+            {{ form_errors(form.date_debut,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Date fin</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.date_fin,{'attr': {'placeholder':'Date fin','class':'form-control'}}) }}
+            {{ form_errors(form.date_fin,{'attr': {'class':'text-danger'}}) }}
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Status</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.event_status,{'attr': {'placeholder':'Event status','class':'d-flex align-content-around flex-wrap'}}) }}
+            {{ form_errors(form.event_status,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Nombre de participants</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.nbr_participants,{'attr': {'placeholder':'Nombre de participants','class':'form-control'}}) }}
+            {{ form_errors(form.nbr_participants,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Lieu</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.lieu,{'attr': {'placeholder':'Lieu','class':'form-control'}}) }}
+            {{ form_errors(form.lieu,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Image</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.image_event,{'attr':{'accept':'image/*'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Client</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.id_client,{'attr': {'placeholder':'client','class':'form-control'}}) }}
+            {{ form_errors(form.id_client,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Type de l'evenement </label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.id_type,{'attr': {'placeholder':'type','class':'form-control'}}) }}
+            {{ form_errors(form.id_type,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-12 col-md-2 col-form-label">Description</label>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.event_description,{'attr': {'placeholder':'Description','class':'form-control'}}) }}
+            {{ form_errors(form.event_description,{'attr': {'class':'text-danger'}}) }}
+        </div>
+    </div>
+
+
+
+    <div class="form-group row col-sm-12">
+        <button class="btn btn-success">{{ button_label|default('Ajouter') }}</button>
+    </div>
+    {{ form_end(form) }}
+

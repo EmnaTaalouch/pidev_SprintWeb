@@ -1,0 +1,155 @@
+{% extends 'TemplateDashboard.html.twig' %}
+
+{% block title %}Calendar index{% endblock %}
+
+{% block body %}
+    <div class="pd-20 card-box mb-30">
+    <div class="clearfix">
+        <div class="pull-left">
+            <h4 class="text-blue h4">Calendar view</h4>
+<br>
+          </div>
+    </div>
+    <div id='calendar'></div>
+    </div>
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                initialDate: '2022-04-07',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                selectable:true,
+                selectHelper:true,
+                select: function(e)
+            {
+                console.log(e)
+                $('#AjouterModel').modal('show');
+                $('#ajouter').click(()=> {
+                    var nom_event = $('#nom_event').val();
+                    var event_type = $('#event_type').val();
+                    var client = $('#client').val();
+                    var lieu = $('#lieu').val();
+                    var nbr = $('#nbr').val();
+                   $.ajax({
+                        url:"{{ path('newcalendar') }}",
+                        type:"POST",
+                        data:{nom_event:nom_event, start:e.startStr, end:e.endStr,event_type:event_type,client:client,lieu:lieu,nbr:nbr},
+                        success:function(data)
+                        {
+                            alert("ajout avec succée");
+                            location.reload();
+                        }
+                    })
+                    $('#AjouterModel').modal('hide');
+                })
+            },  editable: true,
+                eventResizableFromStart: true,
+                eventChange:function(e)
+                {
+                    $.ajax({
+                        url:"{{ path('update_event') }}",
+                        type:"POST",
+                        data:{start:e.event.startStr, end:e.event.endStr,dat:e.event._def.publicId},
+                        success:function(data)
+                        {
+                            alert("modification avec succée");
+                            //location.reload();
+                        }
+                    })
+
+                },
+            eventClick:function(e)
+                {
+                    if(confirm("Are you sure you want to remove it?"))
+                    {
+                        var id = e.event._def.publicId;
+                        $.ajax({
+                            url:"{{ path('remove_event') }}",
+                            type:"POST",
+                            data:{dat:id},
+                            success:function(data)
+                            {
+                                alert("Event Removed");
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                themeSystem: 'bootstrap',
+                events: [
+                    {% for e in events %}
+                    {
+                        id: '{{ e.id }}',
+                        title: '{{ e.nomEvent }}',
+                        start: '{{ e.dateDebut|date('Y-m-d H:i:s') }}',
+                        end: '{{ e.dateFin|date('Y-m-d H:i:s') }}',
+                    },
+                    {% endfor %}
+                ]
+            });
+
+            calendar.render();
+        });
+    </script>
+
+
+    <div class="modal fade" id="AjouterModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un Event</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Nom Event:</label>
+                            <input type="text" class="form-control" id="nom_event">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Event Type:</label>
+                            <select class="form-control" name="event_type" id="event_type">
+                                {% for et in et %}
+                                <option value="{{ et.id }}">{{ et.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Cient:</label>
+                            <select class="form-control" name="event_type" id="client">
+                                {% for c in clients %}
+                                <option value="{{ c.id }}">{{ c.nom ~' '~ c.prenom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Lieu:</label>
+                            <input type="text" class="form-control" id="lieu">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Nombre de participant:</label>
+                            <input type="number" class="form-control" id="nbr">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" id="ajouter"  class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
