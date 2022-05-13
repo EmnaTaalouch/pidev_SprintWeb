@@ -156,17 +156,7 @@ class User implements UserInterface
 
 
 
-    public function getNumtel(): ?string
-    {
-        return $this->Numtel;
-    }
 
-    public function setNumtel(string $Numtel): self
-    {
-        $this->Numtel = $Numtel;
-
-        return $this;
-    }
 
     /**
      * A visual identifier that represents this user.

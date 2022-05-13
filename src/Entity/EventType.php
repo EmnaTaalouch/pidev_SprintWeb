@@ -27,14 +27,11 @@ class EventType
     public function __toString() :string {
         return $this->libelle;
     }
-    /**
-     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="id_type")
-     */
-    private $events;
+
 
     public function __construct()
     {
-        $this->events = new ArrayCollection();
+        //$this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,33 +51,5 @@ class EventType
         return $this;
     }
 
-    /**
-     * @return Collection<int, Event>
-     */
-    public function getEvents(): Collection
-    {
-        return $this->events;
-    }
 
-    public function addEvent(Event $event): self
-    {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
-            $event->setIdType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(Event $event): self
-    {
-        if ($this->events->removeElement($event)) {
-            // set the owning side to null (unless already changed)
-            if ($event->getIdType() === $this) {
-                $event->setIdType(null);
-            }
-        }
-
-        return $this;
-    }
 }
